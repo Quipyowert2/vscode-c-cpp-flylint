@@ -52,12 +52,14 @@ export interface Settings {
     language: 'c' | 'c++';
     compileCommandsPath: string;
 
-    pclintplus: {
+    clangtidy: {
         enable: boolean;
         executable: string;
         configFile: string;
-        headerArgs: string | string[];
-        severityLevels: PclintPlusSeverityMaps;
+        severityLevels: ClangSeverityMaps;
+
+        extraArgs: string[] | null;
+        includePaths: string[] | null;
     }
     cppcheck: {
         enable: boolean;
@@ -78,31 +80,6 @@ export interface Settings {
         severityLevels: CppCheckSeverityMaps;
         extraArgs: string[] | null;
     }
-    clangtidy: {
-        enable: boolean;
-        executable: string;
-        configFile: string;
-        severityLevels: ClangSeverityMaps;
-
-        // common options, which may be overridden per syntax analyzer
-        standard: string[];
-        includePaths: string[];
-        defines: string[];
-        undefines: string[];
-        language: 'c' | 'c++';
-
-        // special options
-        extraArgs: string[] | null;
-        warnings: string[] | null;
-        pedantic: boolean;
-        pedanticErrors: boolean;
-        msExtensions: boolean;
-        noExceptions: boolean;
-        noRtti: boolean;
-        blocks: boolean;
-        includes: string[] | null;
-        standardLibs: string[] | null;
-    }
     flawfinder: {
         enable: boolean;
         executable: string;
@@ -112,6 +89,13 @@ export interface Settings {
         enable: boolean;
         executable: string;
         extraArgs: string[] | null;
+    }
+    pclintplus: {
+        enable: boolean;
+        executable: string;
+        configFile: string;
+        headerArgs: string | string[];
+        severityLevels: PclintPlusSeverityMaps;
     }
 }
 

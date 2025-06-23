@@ -29,7 +29,6 @@ export class ClangTidy extends Linter {
     }
 
     protected buildCommandLine(fileName: string, tmpFileName: string): string[] {
-
         let args = [
             this.executable
         ];
@@ -55,10 +54,18 @@ export class ClangTidy extends Linter {
             }
         }
 
+        if (this.settings.clangtidy.configFile.length > 0 && existsSync(this.settings.clangtidy.configFile)) {
+            args.push("--config");
+            args.push(this.settings.clangtidy.configFile);
+        }
+
         //formatting related
         args.push("--use-color=false");
         args.push("--quiet");
 
+        /**
+         * Unfortunately when using clang-tidy, it can read and block a files write access.
+         */
         if (this.settings.run === 'onType') {
             args.push(sysPath(tmpFileName));
         } else {
@@ -130,8 +137,13 @@ export class ClangTidy extends Linter {
         }
     }
 
-    private getSeverityCode(severity: string): DiagnosticSeverity {
+    private getSeverityCode(severity: string): DiagnosticSeverity | null {
         let output = this.settings.clangtidy.severityLevels[severity as keyof ClangSeverityMaps];
+
+        /** Support None type from settings */
+        if (output == 'None') {
+            return null;
+        }
         return VS_DiagnosticSeverity.from(output);
     }
 }

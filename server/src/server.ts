@@ -73,7 +73,7 @@ let documentLinters: Map<string, Thenable<Linter[]>> = new Map();
 // A mapping between an opened document and its' configured analyzers.
 let documentVersions: Map<string, number> = new Map();
 
-export type InternalDiagnostic = { severity: DiagnosticSeverity, line: number, column: number, message: string, code: undefined | number | string, source: string, parseError?: any, fileName: string };
+export type InternalDiagnostic = { severity: DiagnosticSeverity | null, line: number, column: number, message: string, code: undefined | number | string, source: string, parseError?: any, fileName: string };
 
 namespace CommandIds {
     export const analyzeActiveDocument: string = 'c-cpp-flylint.analyzeActiveDocument';
@@ -546,7 +546,7 @@ async function validateTextDocument(textDocument: TextDocument, force: boolean) 
                 while (--i >= 0) {
                     let msg: InternalDiagnostic = result[i];
 
-                    if (msg === null || msg === undefined || msg.parseError || !msg.hasOwnProperty('line') || msg.source === '') {
+                    if (msg.severity === null || msg === null || msg === undefined || msg.parseError || !msg.hasOwnProperty('line') || msg.source === '') {
                         result.splice(i, 1);
                         continue;
                     }
