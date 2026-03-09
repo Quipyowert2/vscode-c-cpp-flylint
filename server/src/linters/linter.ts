@@ -308,8 +308,8 @@ export class Linter {
         if (!this.enabled) { return []; }
 
         let result = this.runLinter(this.buildCommandLine(fileName, tmpFileName), directory ?? this.workspaceRoot);
-        let stdout = result.stdout !== null ? result.stdout.replace(/\r/g, '').split('\n') : [];
-        let stderr = result.stderr !== null ? result.stderr.replace(/\r/g, '').split('\n') : [];
+        let stdout = result.stdout?.replace(/\r/g, '').split('\n') ?? [];
+        let stderr = result.stderr?.replace(/\r/g, '').split('\n') ?? [];
 
         /* istanbul ignore if */
         if (this.settings.debug) {
